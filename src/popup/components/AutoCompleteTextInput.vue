@@ -1,11 +1,11 @@
 <template>
     <div>
         <b-input-group>
-            <div class="suggestion" :data-placeholder="suggestion">
-                <b-form-input v-model="textInput" size="lg"></b-form-input>
+            <div class="suggestion" :data-placeholder="getSuggestedInput">
+                <b-form-input @keydown="onKeyDown" @keyup="onKeyUp" v-model="textInput" size="lg"></b-form-input>
             </div>
             <b-input-group-append>
-                <button class="btn btn-lg btn-primary" @click="onClick">send</button>
+                <button class="btn btn-lg btn-primary" @click="sendTextMessage" @>send</button>
             </b-input-group-append>
 
         </b-input-group>
@@ -15,7 +15,7 @@
 
 <script>
 
-  import { mapActions, mapState } from 'vuex';
+  import { mapActions, mapGetters, mapState } from 'vuex';
   import { changeInputText } from '../../store/modules/input/actions';
 
   export default {
@@ -24,24 +24,36 @@
       suggestion: String,
     },
     methods: {
-      ...mapActions('input', ['changeInputText']),
+      ...mapActions('input', ['changeInputText','setSugesstedInput']),
       ...mapActions('chat', ['sendTextUserMessage']),
-      onClick: function() {
+      sendTextMessage: function() {
         this.sendTextUserMessage(this.textInput);
         this.changeInputText('');
+      },
+      onKeyUp: function(e) {
+        if (event.keyCode === 9){
+          e.preventDefault();
+          this.setSugesstedInput()
+        }
+        if (event.keyCode === 13)
+          this.sendTextMessage();
+      },
+      onKeyDown: function(e) {
+        if (event.keyCode === 9)
+          e.preventDefault();
       },
     },
     computed: {
       ...mapState('input', ['input']),
+      ...mapGetters('input', ['getSuggestedInput']),
       textInput: {
         get() {
           return this.input;
         },
         set(value) {
-          console.log('r u valled');
           this.changeInputText(value);
         },
-      },
+      }
     },
   };
 </script>

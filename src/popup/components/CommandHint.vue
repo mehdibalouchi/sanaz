@@ -1,16 +1,19 @@
 <template>
     <div>
-        <span>{{getSuggestedCommand}}</span>
+        <span @click="setSuggestedCommand">{{getSuggestedCommand}}</span>
     </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
 
   export default {
     name: 'CommandHint',
+    methods:{
+      ...mapActions('input', ['setSuggestedCommand']),
+    },
     computed:{
-      ...mapGetters('input',['getSuggestedCommand'])
+      ...mapGetters('input',['getSuggestedCommand',])
     }
   };
 </script>

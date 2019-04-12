@@ -1,5 +1,5 @@
 import * as types from './mutation-types';
-import { getCommandSuggetions, getInputSuggetions } from '../../../services/suggestion';
+import { getCommandSuggetions, getInputSuggetions, getSample } from '../../../services/suggestion';
 
 // actions
 export const loadCommandSuggestions = function({ commit, state }) {
@@ -13,4 +13,17 @@ export const changeInputText = function({ dispatch, commit, state }, value) {
   commit(types.INPUT_CHANGED, value);
   dispatch('loadCommandSuggestions');
   dispatch('loadInputSuggestions');
+};
+
+export const setSuggestedCommand = function({ dispatch, commit, state, getters }) {
+  if (getters.getSuggestedCommand !== '') {
+    let sample = getSample(getters.getSuggestedCommand);
+    commit(types.INPUT_CHANGED, sample);
+  }
+
+};
+
+export const setSugesstedInput = function({ dispatch, commit, state, getters }) {
+  if (getters.getSuggestedItem !== '')
+    commit(types.INPUT_CHANGED, getters.getSuggestedInput);
 };
