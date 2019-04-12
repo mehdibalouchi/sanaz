@@ -1,6 +1,6 @@
 <template>
     <div class="container conversion-container">
-        <b-row v-for="message in history" :key="message.id">
+        <b-row v-for="message in sortedHistory" :key="message.id">
             <b-col sm="12">
                 <MessageCard :message="message"></MessageCard>
             </b-col>
@@ -10,14 +10,14 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { mapGetters, mapState } from 'vuex';
   import MessageCard from './MessageCard'
 
   export default {
     name: 'Conversation',
     components: { MessageCard },
     computed:{
-      ...mapState('chat',['history'])
+      ...mapGetters('chat',['sortedHistory'])
     }
   };
 </script>

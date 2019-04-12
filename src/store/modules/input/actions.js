@@ -9,8 +9,8 @@ export const loadInputSuggestions = function({ commit, state }) {
   commit(types.LOUD_INPUT_SUGGESTION, getInputSuggetions(state.input));
 };
 
-export const changeInputText = function({ commit, state }, value) {
-  commit(types.INPUT_CHANGED, value)
-  loadCommandSuggestions({commit,state})
-  loadInputSuggestions({commit,state})
-}
+export const changeInputText = function({ dispatch, commit, state }, value) {
+  commit(types.INPUT_CHANGED, value);
+  dispatch('loadCommandSuggestions');
+  dispatch('loadInputSuggestions');
+};

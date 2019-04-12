@@ -1,43 +1,53 @@
-// import * as types from './mutation-types';
-// import {filterService} from '@/shared/constants';
-// import {FilterOptionsRequest} from '@/api/filter_pb'
-//
-// // actions
-// export const addTypeFilter = function ({commit, state}, {value}) {
-//   commit(types.ADD_FILTER, {filterName:'typeFilter', value})
-// }
-// export const addRuleFilter = function ({commit, state}, {value}) {
-//   commit(types.ADD_FILTER, {filterName:'ruleFilter', value})
-// }
-// export const addPositionFilter = function ({commit, state}, {value}) {
-//   commit(types.ADD_FILTER, {filterName:'positionFilter', value})
-// }
-// export const removeTypeFilter = function ({commit, state}, {value}) {
-//   commit(types.REMOVE_FILTER, {filterName:'typeFilter', value})
-// }
-// export const removeRuleFilter = function ({commit, state}, {value}) {
-//   commit(types.REMOVE_FILTER, {filterName:'ruleFilter', value})
-// }
-// export const removePositionFilter = function ({commit, state}, {value}) {
-//   commit(types.REMOVE_FILTER, {filterName:'positionFilter', value})
-// }
-// export const setTypeFilter = function ({commit, state}, typeList) {
-//   commit(types.SET_TYPE_FILTER, typeList)
-// }
-// export const setPositionFilter = function ({commit, state}, positions) {
-//   commit(types.SET_POSITION_FILTER, positions)
-// }
-// export const setOptions = function ({state, commit, rootState}) {
-//   let request = new FilterOptionsRequest()
-//   request.setCategory(rootState.simulation.selectedSimulation.type)
-//   filterService.getFilterOptions(request,{},(err, response)=>{
-//     if(err){
-//       console.log(err)
-//       return
-//     }
-//     let airctaftTypes = [...response.toObject().typeList]
-//     let position = [...response.toObject().positionList]
-//     commit(types.SET_TYPE_OPTIONS, airctaftTypes)
-//     commit(types.SET_POSITION_OPTIONS, position)
-//   })
-// }
+import * as types from './mutation-types';
+import { processText } from '../../../services/chat-bot';
+import uuid4 from 'uuid/v4'
+
+// actions
+export const sendTextUserMessage = function({ commit, state, dispatch }, messageText) {
+  let id = uuid4()
+  let now = new Date()
+  let userMessage = {
+    ...messageCaseClass,
+    id: id,
+    content: messageText,
+    contentType: 'text',
+    state: null,
+    createdDatetime: now,
+  };
+  commit(types.ADD_MESSAGE, userMessage);
+  dispatch('processTextMessage', userMessage);
+};
+
+export const sendTextBotMessage = function({ commit, state, getters }, {message, messageType}) {
+  let id = uuid4()
+  let now = new Date()
+  let botMessage = {
+    ...messageCaseClass,
+    id: id,
+    content: message,
+    contentType: messageType,
+    sender: 'bot',
+    state: null,
+    createdDatetime: now,
+  };
+  commit(types.ADD_MESSAGE, botMessage);
+};
+
+export const processTextMessage = function({ commit, state, dispatch }, userMessage) {
+  let result = processText(userMessage.content);
+  commit(types.REMOVE_MESSAGE, userMessage.id);
+  commit(types.ADD_MESSAGE, {...userMessage, status: true})
+  if (result.message && result.messageType) {
+    dispatch('sendTextBotMessage', {message:result.message,messageType: result.messageType});
+  }
+
+};
+
+const messageCaseClass = {
+  id: 0,
+  content: '',
+  contentType: 'text',
+  sender: 'user',
+  status: null,
+  createdDatetime: null,
+};
