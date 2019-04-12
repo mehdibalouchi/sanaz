@@ -5,7 +5,8 @@ export const getCommandSuggetions = (input) => {
 };
 
 export const getSample = (hint)=>{
-  return commandSuggestions.find((value)=>value.hint === hint)
+  let item =  commandSuggestions.find((value)=>value.hint === hint)
+  return item.sample
 }
 
 export const getInputSuggetions = (input) => {

@@ -19,11 +19,17 @@ export const setSuggestedCommand = function({ dispatch, commit, state, getters }
   if (getters.getSuggestedCommand !== '') {
     let sample = getSample(getters.getSuggestedCommand);
     commit(types.INPUT_CHANGED, sample);
+    dispatch('loadCommandSuggestions');
+    dispatch('loadInputSuggestions');
   }
 
 };
 
 export const setSugesstedInput = function({ dispatch, commit, state, getters }) {
-  if (getters.getSuggestedItem !== '')
+  if (getters.getSuggestedItem !== ''){
     commit(types.INPUT_CHANGED, getters.getSuggestedInput);
+    dispatch('loadCommandSuggestions');
+    dispatch('loadInputSuggestions');
+  }
+
 };
