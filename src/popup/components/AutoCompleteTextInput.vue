@@ -16,7 +16,6 @@
 <script>
 
   import { mapActions, mapGetters, mapState } from 'vuex';
-  import { changeInputText } from '../../store/modules/input/actions';
 
   export default {
     name: 'AutoCompleteTextInput',
