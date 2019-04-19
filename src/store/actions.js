@@ -1,8 +1,8 @@
-import * as types from './mutation-types';
-import { getCommandSuggetions, getInputSuggetions, getSample } from '../services/suggestion';
-import { processText } from '../services/chat-bot';
 import uuid4 from 'uuid/v4';
-import moment from 'moment'
+import moment from 'moment';
+
+import * as types from './mutation-types';
+import { getCommandSuggetions, getInputSuggetions, getSample, processText } from '../services';
 
 // actions
 export const loadCommandSuggestions = function({ commit, state }) {
@@ -29,7 +29,7 @@ export const setSuggestedCommand = function({ dispatch, commit, state, getters }
 };
 
 export const setSugesstedInput = function({ dispatch, commit, state, getters }) {
-  if (getters.getSuggestedItem !== ''){
+  if (getters.getSuggestedItem !== '') {
     commit(types.INPUT_CHANGED, getters.getSuggestedInput);
     dispatch('loadCommandSuggestions');
     dispatch('loadInputSuggestions');
