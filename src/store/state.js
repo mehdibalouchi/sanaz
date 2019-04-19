@@ -22,4 +22,10 @@ export const mutations = {
   [types.LOUD_INPUT_SUGGESTION](state, value) {
     state.inputSuggestions = [...value];
   },
+  [types.ADD_MESSAGE](state, value) {
+    state.history = [...state.history, value];
+  },
+  [types.REMOVE_MESSAGE](state, messageId) {
+    state.history = [...state.history.filter((item)=>item.id !== messageId)]
+  }
 };
