@@ -1,7 +1,5 @@
 <template>
-
-        <PopupContainer></PopupContainer>
-
+    <PopupContainer></PopupContainer>
 </template>
 
 <script>
@@ -21,10 +19,7 @@
     p {
         font-size: 20px;
     }
-    /*.container{*/
-        /*margin-top: 2%;*/
-        /*margin-bottom: 2%;*/
-    /*}*/
+
     body {
         width: 450px;
         height: 100%;
