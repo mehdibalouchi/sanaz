@@ -1,21 +1,21 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
-import input from './modules/input'
-import chat from './modules/chat'
 import VuexPersistence from 'vuex-persist'
+
+import {state, mutations} from './state'
+import * as getters from './getters';
+import * as actions from './actions'
 
 Vue.use(Vuex);
 
 const vuexLocal = new VuexPersistence({
-  storage: window.localStorage,
-  modules: ['chat']
+  storage: window.localStorage
 });
 
 export default new Vuex.Store({
-  modules:{
-    input,
-    chat
-  },
+  state,
+  getters,
+  actions,
+  mutations,
   plugins: [vuexLocal.plugin]
 });
