@@ -2,7 +2,7 @@ import uuid4 from 'uuid/v4';
 import moment from 'moment';
 
 import * as types from './mutation-types';
-import { getCommandSuggetions, getInputSuggetions, getSample, processText } from '../services';
+import { getCommandSuggetions, getInputSuggetions, getSample, processText } from '../services/tfxi';
 
 // actions
 export const loadCommandSuggestions = function({ commit, state }) {
