@@ -53,6 +53,48 @@ export const commandSuggestions = Object.keys(availableCommand).reduce(function(
   return result;
 }, []);
 
+export const getCommandSuggetions = (input) => {
+  return commandSuggestions.filter(({ hint }) => hint.includes(input)).map((item) => item.hint);
+};
+
+export const getSample = (hint) => {
+  let item = commandSuggestions.find((value) => value.hint === hint);
+  return item.sample;
+};
+
+export const getInputSuggetions = (input) => {
+  let searchString = input.split(' ').slice(-1)[0];
+  if (searchString && searchString.length > 0)
+    return inputSuggestions.filter((item) => String(item).startsWith(String(searchString)));
+  return [];
+};
+
+export const processText = function(text) {
+  let { command, params } = commandFactory(text);
+  let commandResult = runAction(command, params);
+  return responseFactory(command, commandResult);
+};
+
+const runAction = function(command, params) {
+  console.log(`hello im sanaz and doing ${command} for you!`);
+  return availableCommand[command].func(...params);
+};
+
+const responseFactory = (command, commandResult) => {
+  return { message: commandResult, messageType: availableCommand[command].returnType };
+};
+
+const commandFactory = (text) => {
+  if (textToCommand.hasOwnProperty(text)) {
+    return textToCommand[text];
+  }
+  return {
+    command: 'failed',
+    params: [],
+  };
+};
+
+
 export default {
   textToCommand,
   availableCommand,
