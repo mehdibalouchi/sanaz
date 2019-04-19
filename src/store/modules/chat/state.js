@@ -2,9 +2,7 @@ import * as types from './mutation-types';
 
 // initial state
 export const state = {
-  history: [
-
-  ],
+  history: [],
 };
 
 // // mutations

@@ -6,6 +6,7 @@ export const state = {
   inputType: 'text',
   commandSuggestions: [],
   inputSuggestions: [],
+  history: []
 };
 
 // mutations
