@@ -6,8 +6,8 @@
   export default {
     name: 'TextMessage',
     props: {
-      text: String
-    }
+      text: String,
+    },
   };
 </script>
 

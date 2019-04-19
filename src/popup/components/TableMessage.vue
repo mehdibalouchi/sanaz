@@ -7,8 +7,8 @@
     name: 'TableMessage',
     props: {
       fields: Array,
-      items: Array
-    }
+      items: Array,
+    },
   };
 </script>
 

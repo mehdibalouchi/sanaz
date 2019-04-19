@@ -11,8 +11,8 @@
     components: {
       AutoCompleteTextInput,
     },
-    computed:{
-      ...mapGetters(['getSuggestedInput'])
+    computed: {
+      ...mapGetters(['getSuggestedInput']),
     },
   };
 </script>
