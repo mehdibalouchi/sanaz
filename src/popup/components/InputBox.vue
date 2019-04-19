@@ -12,7 +12,7 @@
       AutoCompleteTextInput,
     },
     computed:{
-      ...mapGetters('input', ['getSuggestedInput'])
+      ...mapGetters(['getSuggestedInput'])
     },
   };
 </script>

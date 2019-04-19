@@ -17,7 +17,7 @@
     name: 'Conversation',
     components: { MessageCard },
     computed:{
-      ...mapGetters('chat',['sortedHistory'])
+      ...mapGetters(['sortedHistory'])
     }
   };
 </script>

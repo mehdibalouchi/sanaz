@@ -24,8 +24,7 @@
       suggestion: String,
     },
     methods: {
-      ...mapActions('input', ['changeInputText','setSugesstedInput']),
-      ...mapActions('chat', ['sendTextUserMessage']),
+      ...mapActions(['changeInputText','setSugesstedInput','sendTextUserMessage']),
       sendTextMessage: function() {
         this.sendTextUserMessage(this.textInput);
         this.changeInputText('');
@@ -44,8 +43,8 @@
       },
     },
     computed: {
-      ...mapState('input', ['input']),
-      ...mapGetters('input', ['getSuggestedInput']),
+      ...mapState(['input']),
+      ...mapGetters(['getSuggestedInput']),
       textInput: {
         get() {
           return this.input;

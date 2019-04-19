@@ -10,10 +10,10 @@
   export default {
     name: 'CommandHint',
     methods:{
-      ...mapActions('input', ['setSuggestedCommand']),
+      ...mapActions(['setSuggestedCommand']),
     },
     computed:{
-      ...mapGetters('input',['getSuggestedCommand',])
+      ...mapGetters(['getSuggestedCommand',])
     }
   };
 </script>
