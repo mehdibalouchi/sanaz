@@ -12,6 +12,7 @@ const config = {
   entry: {
     'background': './background.js',
     'popup/popup': './popup/popup.js',
+    'sidebar/sidebar': './sidebar/sidebar.js',
   },
   output: {
     path: __dirname + '/dist',
@@ -63,6 +64,7 @@ const config = {
     new CopyWebpackPlugin([
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
+      { from: 'sidebar/sidebar.html', to: 'sidebar/sidebar.html', transform: transformHtml },
       {
         from: 'manifest.json',
         to: 'manifest.json',

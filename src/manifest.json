@@ -11,6 +11,15 @@
     "default_title": "sanaz",
     "default_popup": "popup/popup.html"
   },
+  "sidebar_action": {
+    "default_title": "My sidebar",
+    "default_panel": "sidebar/sidebar.html"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
   "background": {
     "scripts": [
       "background.js"
