@@ -70,7 +70,7 @@ export const getInputSuggetions = (input) => {
 };
 
 export const processInput = function(input) {
-  let { command params } = commandFactory(input);
+  let { command, params } = commandFactory(input);
   let commandResult = runAction(command, params);
   return responseFactory(command, commandResult);
 };
