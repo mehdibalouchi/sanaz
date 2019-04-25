@@ -1,5 +1,5 @@
 <template>
-    <b-table :items="items" :fields="fields"></b-table>
+    <p>{{itemsString}}</p>
 </template>
 
 <script>
@@ -8,6 +8,11 @@
     props: {
       fields: Array,
       items: Array,
+    },
+    computed: {
+      itemsString: () => {
+        return JSON.stringify(this.items);
+      },
     },
   };
 </script>

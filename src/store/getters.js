@@ -16,7 +16,7 @@ export const getSuggestedItem = function(state) {
 };
 
 export const getSuggestedInput = function(state) {
-  return state.input.substring(0, state.input.lastIndexOf(' ')) + ' ' + (state.inputSuggestions.length > 0 ? state.inputSuggestions[0] : '');
+  return state.input.substring(0, state.input.lastIndexOf(' ')) + (state.input.includes(' ') ? ' ' : '') + (state.inputSuggestions.length > 0 ? state.inputSuggestions[0] : '');
 };
 
 export const sortedHistory = function(state) {

@@ -4,3 +4,4 @@ export const LOUD_INPUT_SUGGESTION = 'loudInputSuggestion';
 export const LOUD_COMMAND_SUGGESTION = 'loudCommandSuggestion';
 export const ADD_MESSAGE = 'addMessage';
 export const REMOVE_MESSAGE = 'messagePrccessed';
+export const TOGGLE_RECORDING = 'toggleRecording';

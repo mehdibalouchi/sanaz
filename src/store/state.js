@@ -4,6 +4,7 @@ import * as types from './mutation-types';
 export const state = {
   input: '',
   inputType: 'text',
+  isAudioRecording: false,
   commandSuggestions: [],
   inputSuggestions: [],
   history: []
@@ -16,6 +17,9 @@ export const mutations = {
   },
   [types.INPUT_TYPE_CHANGED](state, value) {
     state.inputType = value;
+  },
+  [types.TOGGLE_RECORDING](state) {
+    state.isAudioRecording = !state.isAudioRecording;
   },
   [types.LOUD_COMMAND_SUGGESTION](state, value) {
     state.commandSuggestions = [...value];

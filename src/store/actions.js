@@ -2,7 +2,7 @@ import uuid4 from 'uuid/v4';
 import moment from 'moment';
 
 import * as types from './mutation-types';
-import { getCommandSuggetions, getInputSuggetions, getSample, processText } from '../services/tfxi';
+import { getCommandSuggetions, getInputSuggetions, getSample, processInput } from '../services/tfxi';
 
 // actions
 export const loadCommandSuggestions = function({ commit, state }) {
@@ -11,6 +11,18 @@ export const loadCommandSuggestions = function({ commit, state }) {
 export const loadInputSuggestions = function({ commit, state }) {
   commit(types.LOUD_INPUT_SUGGESTION, getInputSuggetions(state.input));
 };
+
+
+export const startRecording = function({ commit, state }) {
+  commit(types.INPUT_TYPE_CHANGED, 'audio');
+  commit(types.TOGGLE_RECORDING);
+};
+
+export const stopRecording = function({ commit, state }, audio) {
+  commit(types.INPUT_CHANGED, audio);
+  commit(types.TOGGLE_RECORDING);
+};
+
 
 export const changeInputText = function({ dispatch, commit, state }, value) {
   commit(types.INPUT_CHANGED, value);
@@ -37,20 +49,50 @@ export const setSugesstedInput = function({ dispatch, commit, state, getters }) 
 
 };
 
-export const sendTextUserMessage = function({ commit, state, dispatch }, messageText) {
+export const sendUserMessage = function({ dispatch, commit, state }) {
+  if (state.inputType === 'text' && typeof state.input === 'string' && state.input.length > 0) {
+    dispatch('sendTextUserMessage');
+  } else if (state.inputType === 'audio' && !state.isAudioRecording) {
+    dispatch('sendAudioUserMessage');
+  } else {
+    console.log('requested action not allowed');
+  }
+
+};
+
+export const sendAudioUserMessage = function({ commit, state, dispatch }) {
   let id = uuid4();
   let now = new moment().toISOString();
   let userMessage = {
     ...messageCaseClass,
     id: id,
-    content: messageText,
+    content: state.input,
+    contentType: 'audio',
+    state: null,
+    createdDatetime: now,
+  };
+  commit(types.ADD_MESSAGE, userMessage);
+  commit(types.INPUT_TYPE_CHANGED, 'text');
+  dispatch('processMessage', userMessage);
+  dispatch('changeInputText', '');
+};
+
+export const sendTextUserMessage = function({ commit, state, dispatch }) {
+  let id = uuid4();
+  let now = new moment().toISOString();
+  let userMessage = {
+    ...messageCaseClass,
+    id: id,
+    content: state.input,
     contentType: 'text',
     state: null,
     createdDatetime: now,
   };
   commit(types.ADD_MESSAGE, userMessage);
-  dispatch('processTextMessage', userMessage);
+  dispatch('processMessage', userMessage);
+  commit(types.INPUT_CHANGED, '');
 };
+
 
 export const sendTextBotMessage = function({ commit, state, getters }, { message, messageType }) {
   let id = uuid4();
@@ -67,8 +109,8 @@ export const sendTextBotMessage = function({ commit, state, getters }, { message
   commit(types.ADD_MESSAGE, botMessage);
 };
 
-export const processTextMessage = function({ commit, state, dispatch }, userMessage) {
-  let result = processText(userMessage.content);
+export const processMessage = function({ commit, state, dispatch }, userMessage) {
+  let result = processInput(userMessage.content);
   commit(types.REMOVE_MESSAGE, userMessage.id);
   commit(types.ADD_MESSAGE, { ...userMessage, status: true });
   if (result.message && result.messageType) {
@@ -76,6 +118,7 @@ export const processTextMessage = function({ commit, state, dispatch }, userMess
   }
 
 };
+
 
 const messageCaseClass = {
   id: 0,

@@ -69,11 +69,12 @@ export const getInputSuggetions = (input) => {
   return [];
 };
 
-export const processText = function(text) {
-  let { command, params } = commandFactory(text);
+export const processInput = function(input) {
+  let { command params } = commandFactory(input);
   let commandResult = runAction(command, params);
   return responseFactory(command, commandResult);
 };
+
 
 const runAction = function(command, params) {
   console.log(`hello im sanaz and doing ${command} for you!`);
@@ -84,9 +85,9 @@ const responseFactory = (command, commandResult) => {
   return { message: commandResult, messageType: availableCommand[command].returnType };
 };
 
-const commandFactory = (text) => {
-  if (textToCommand.hasOwnProperty(text)) {
-    return textToCommand[text];
+const commandFactory = (input) => {
+  if (typeof input === 'string' && textToCommand.hasOwnProperty(input)) {
+    return textToCommand[input];
   }
   return {
     command: 'failed',

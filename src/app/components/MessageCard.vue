@@ -1,10 +1,10 @@
 <template>
     <div class="message-card-container">
-        <b-card>
+        <div class="message-card">
             <TextMessage v-if="message.contentType==='text'" :text="message.content"></TextMessage>
             <TableMessage v-if="message.contentType==='table'" :fields="message.content.fields"
                           :items="message.content.items"></TableMessage>
-        </b-card>
+        </div>
     </div>
 </template>
 
