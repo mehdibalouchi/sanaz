@@ -9,8 +9,8 @@
 </template>
 
 <script>
-  import TableMessage from './TableMessage';
-  import TextMessage from './TextMessage';
+  import TableMessage from './TableMessage.vue?shadow';
+  import TextMessage from './TextMessage.vue?shadow';
 
   export default {
     name: 'MessageCard',

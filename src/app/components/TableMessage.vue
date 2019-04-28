@@ -10,7 +10,7 @@
       items: Array,
     },
     computed: {
-      itemsString: () => {
+      itemsString: function() {
         return JSON.stringify(this.items);
       },
     },

@@ -25,14 +25,13 @@
 
 <style scoped>
     .conversion-container {
-
-        display: flex !important;
+        display: flex;
         justify-content: space-around;
         flex-direction: column;
-        overflow: hidden !important;
-        height: 100% !important;
-        overflow-y: scroll !important;
-        overflow-wrap: break-word !important;
-        /*width: 100%;*/
+        overflow: hidden;
+        height: 100%;
+        overflow-y: scroll;
+        overflow-wrap: break-word;
+        width: 100%;
     }
 </style>

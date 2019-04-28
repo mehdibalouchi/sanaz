@@ -1,7 +1,10 @@
 global.browser = require('webextension-polyfill');
-import store from './store';
+global.browser = require('@webcomponents/webcomponentsjs/webcomponents-bundle');
+global.browser = require('@webcomponents/webcomponentsjs/custom-elements-es5-adapter');
 
-console.log('fuck');
+// import store from './store';
+
+// console.log('fuck');
 
 //
 // chrome.browserAction.onClicked.addListener(tab => {

@@ -12,6 +12,7 @@ const config = {
   entry: {
     'background': './background.js',
     'app/main': './app/main.js',
+    'popup/popup': './popup/popup.js',
   },
   output: {
     path: __dirname + '/dist',
@@ -25,6 +26,9 @@ const config = {
       {
         test: /\.vue$/,
         loaders: 'vue-loader',
+        options: {
+          shadowMode: true, // vue-loader v15.0.9+
+        },
       },
       {
         test: /\.js$/,
@@ -33,15 +37,26 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [
+          {
+            loader: 'vue-style-loader',
+            options: {
+              shadowMode: true,
+            },
+          }, 'css-loader'],
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [{
+          loader: 'vue-style-loader',
+          options: {
+            shadowMode: true,
+          },
+        }, 'sass-loader'],
       },
       {
         test: /\.sass$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader?indentedSyntax'],
+        use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax'],
       },
       {
         test: /\.(png|jpg|gif|svg|ico)$/,
@@ -57,12 +72,9 @@ const config = {
       global: 'window',
     }),
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-    }),
     new CopyWebpackPlugin([
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
-      // { from: 'app/index.html', to: 'app/index.html', transform: transformHtml },
+      { from: 'popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
       {
         from: 'manifest.json',
         to: 'manifest.json',
@@ -71,7 +83,7 @@ const config = {
           jsonContent.version = version;
 
           if (config.mode === 'development') {
-            jsonContent['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+            jsonContent['content_security_policy'] = 'script-src \'self\' \'unsafe-eval\'; object-src \'self\'';
           }
 
           return JSON.stringify(jsonContent, null, 2);

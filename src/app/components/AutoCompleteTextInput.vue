@@ -1,6 +1,7 @@
 <template>
     <div class="suggestion" :data-placeholder="getSuggestedInput">
-        <input @keydown="onKeyDown" @keyup="onKeyUp" v-model="textInput">
+        <input v-on:keyup.tab.stop.prevent="setSugesstedInput" v-on:keyup.enter="sendUserMessage"
+               v-on:keydown.tab.stop.prevent="" v-on:keypress.tab.stop.prevent="" v-model="textInput">
     </div>
 </template>
 
@@ -11,19 +12,7 @@
   export default {
     name: 'AutoCompleteTextInput',
     methods: {
-      ...mapActions(['changeInputText', 'setSugesstedInput']),
-      onKeyUp: function(e) {
-        if (event.keyCode === 9) {
-          e.preventDefault();
-          this.setSugesstedInput();
-        }
-        if (event.keyCode === 13)
-          this.sendTextUserMessage();
-      },
-      onKeyDown: function(e) {
-        if (event.keyCode === 9)
-          e.preventDefault();
-      },
+      ...mapActions(['changeInputText', 'setSugesstedInput', 'sendUserMessage']),
     },
     computed: {
       ...mapState(['input']),

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import AutoCompleteTextInput from './AutoCompleteTextInput';
-  import AudioInput from './AudioInput';
+  import AutoCompleteTextInput from './AutoCompleteTextInput.vue?shadow';
+  import AudioInput from './AudioInput.vue?shadow';
   import { mapActions, mapGetters, mapState } from 'vuex';
 
   export default {
