@@ -1,5 +1,5 @@
 <template>
-    <p>{{text}}</p>
+    <div class="message">{{text}}</div>
 </template>
 
 <script>
@@ -12,5 +12,12 @@
 </script>
 
 <style scoped>
-
+    .message {
+        width: 100%;
+        padding-left: 20px;
+        padding-top: 25px;
+        font-size: large;
+        /*text-align: right;*/
+        min-height: 100px;
+    }
 </style>

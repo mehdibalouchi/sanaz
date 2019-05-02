@@ -59,7 +59,7 @@ const config = {
         use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax'],
       },
       {
-        test: /\.(png|jpg|gif|svg|ico)$/,
+        test: /\.(png|jpg|gif|svg|ico|woff(2)?|eot|ttf)$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?emitFile=false',
@@ -74,6 +74,7 @@ const config = {
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
+      { from: 'assets', to: 'assets', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
       {
         from: 'manifest.json',

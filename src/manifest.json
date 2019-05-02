@@ -8,7 +8,8 @@
     "128": "icons/icon_128.png"
   },
   "web_accessible_resources": [
-    "app/main.js"
+    "app/main.js",
+    "assets/*.svg"
   ],
   "browser_action": {
     "default_title": "sanaz",

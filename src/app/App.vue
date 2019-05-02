@@ -1,21 +1,27 @@
 <template>
-    <div class="app-container">
+    <v-container pa-0 ma-0 v-if="show==='true'">
         <OptionBox></OptionBox>
-        <hr/>
-        <Conversation></Conversation>
-        <hr/>
+        <!--<v-container fluid grid-list-sm>-->
+        <Conversation style="max-height: 100%"></Conversation>
+        <!--</v-container>-->
+
         <CommandHint></CommandHint>
-        <hr/>
+
         <InputBox></InputBox>
-    </div>
+
+
+    </v-container>
+
 </template>
 
 <script>
+
   import store from '../store';
   import OptionBox from './components/OptionBox.vue?shadow';
   import Conversation from './components/Conversation.vue?shadow';
   import InputBox from './components/InputBox.vue?shadow';
   import CommandHint from './components/CommandHint.vue?shadow';
+
 
   export default {
     store,
@@ -25,13 +31,14 @@
       InputBox,
       CommandHint,
     },
+    props: [
+      'show',
+    ],
+
   };
 </script>
 
-<style scoped>
-    .app-container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
+<style>
+    @import '~vuetify/dist/vuetify.min.css';
+
 </style>
