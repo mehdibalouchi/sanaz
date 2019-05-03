@@ -48,7 +48,7 @@
       AudioInput,
     },
     methods: {
-      ...mapActions(['sendUserMessage', 'startRecording', 'stopRecording', 'sendAudioUserMessage', 'changeInputText']),
+      ...mapActions(['sendUserMessage', 'changeInputText', 'clearInput']),
       checkCompatibility() {
         if (!recognition) {
           this.error = 'Speech Recognition is not available on this browser. Please use Chrome or Firefox';
@@ -110,8 +110,10 @@
 
     },
     mounted: function() {
+      this.checkCompatibility();
       this.sendUrl = chrome.extension.getURL('assets/send.svg');
       this.micUrl = chrome.extension.getURL('assets/microphone.svg');
+      this.clearInput();
     },
   };
 </script>

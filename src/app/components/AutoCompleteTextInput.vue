@@ -1,9 +1,18 @@
 <template>
     <v-text-field style="font-size: medium !important;"
+                  value=""
+                  v-on:keyup.enter.stop.prevent="sendUserMessage"
+                  v-on:keydown.enter.stop.prevent=""
+                  v-on:keypress.enter.stop.prevent=""
                   v-on:keyup.tab.stop.prevent="setSugesstedInput"
-                  v-on:keyup.enter="sendUserMessage"
                   v-on:keydown.tab.stop.prevent=""
                   v-on:keypress.tab.stop.prevent=""
+                  v-on:keyup.up.stop.prevent="navigateCommandHistory('up')"
+                  v-on:keydown.up.stop.prevent=""
+                  v-on:keypress.up.stop.prevent=""
+                  v-on:keyup.down.stop.prevent="navigateCommandHistory('down')"
+                  v-on:keydown.down.stop.prevent=""
+                  v-on:keypress.dow.stop.prevent=""
                   v-model="textInput"
                   :hint="getSuggestedInput"
                   persistent-hint></v-text-field>
@@ -16,7 +25,7 @@
   export default {
     name: 'AutoCompleteTextInput',
     methods: {
-      ...mapActions(['changeInputText', 'setSugesstedInput', 'sendUserMessage']),
+      ...mapActions(['changeInputText', 'navigateCommandHistory', 'setSugesstedInput', 'sendUserMessage']),
     },
     computed: {
       ...mapState(['input']),

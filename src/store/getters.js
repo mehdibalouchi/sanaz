@@ -22,3 +22,8 @@ export const getSuggestedInput = function(state) {
 export const sortedHistory = function(state) {
   return state.history.sort((item1, item2) => moment(item1.createdDatetime).diff(moment(item2.createdDatetime), 'milliseconds'));
 };
+
+
+export const selectedInputHistory = function(state) {
+  return state.inputHistory[1];
+};

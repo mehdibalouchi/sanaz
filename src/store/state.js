@@ -9,6 +9,8 @@ export const state = {
   inputSuggestions: [],
   history: [],
   inputHistory: [],
+  selectedInputHistoryIndex: null,
+  inputHistoryLimit: 5,
 };
 
 // mutations
@@ -18,6 +20,9 @@ export const mutations = {
   },
   [types.INPUT_TYPE_CHANGED](state, value) {
     state.inputType = value;
+  },
+  [types.SET_SELECTED_INPUT_HISTORY](state, value) {
+    state.selectedInputHistoryIndex = value;
   },
   [types.TOGGLE_RECORDING](state) {
     state.isAudioRecording = !state.isAudioRecording;
@@ -31,10 +36,15 @@ export const mutations = {
   [types.ADD_MESSAGE](state, value) {
     state.history = [...state.history, value];
   },
-  [types.ADD_INPUT_HISTORY](state, value) {
-    state.inputHistory = [value, ...state.history.slice(0, 6)];
-  },
   [types.REMOVE_MESSAGE](state, messageId) {
-    state.history = [...state.history.filter((item)=>item.id !== messageId)]
+    state.history = [...state.history.filter((item) => item.id !== messageId)];
+  },
+  [types.ADD_INPUT_HISTORY](state, value) {
+    state.inputHistory = [value, ...state.inputHistory.slice(0, state.inputHistoryLimit + 1)];
+    console.log(state.inputHistory);
+  },
+  [types.UPDDATE_INPUT_HISTORY_ITEM](state, value) {
+    console.log([...state.inputHistory.slice(0, state.selectedInputHistoryIndex), value, ...state.inputHistory.slice(state.selectedInputHistoryIndex + 1)]);
+    state.inputHistory = [...state.inputHistory.slice(0, state.selectedInputHistoryIndex), value, ...state.inputHistory.slice(state.selectedInputHistoryIndex + 1)];
   }
 };

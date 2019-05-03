@@ -12,20 +12,37 @@ export const loadInputSuggestions = function({ commit, state }) {
   commit(types.LOUD_INPUT_SUGGESTION, getInputSuggetions(state.input));
 };
 
-
-export const startRecording = function({ commit, state }) {
-  commit(types.INPUT_TYPE_CHANGED, 'audio');
-  commit(types.TOGGLE_RECORDING);
+export const clearInput = function({ commit, state, dispatch }) {
+  commit(types.INPUT_TYPE_CHANGED, 'text');
+  dispatch('openHistoryItem');
+  dispatch('loadCommandSuggestions');
+  dispatch('loadInputSuggestions');
 };
 
-export const stopRecording = function({ commit, state }, audio) {
-  commit(types.INPUT_CHANGED, audio);
-  commit(types.TOGGLE_RECORDING);
+
+export const openHistoryItem = function({ commit, state }) {
+  if (state.inputHistory[state.selectedInputHistoryIndex].length > 0) {
+    commit(types.ADD_INPUT_HISTORY, '');
+    commit(types.SET_SELECTED_INPUT_HISTORY, 0);
+    commit(types.INPUT_CHANGED, '');
+  }
 };
 
+export const navigateCommandHistory = function({ commit, state, getters }, value) {
+  if (value && value === 'up' && state.selectedInputHistoryIndex < state.inputHistoryLimit) {
+    commit(types.SET_SELECTED_INPUT_HISTORY, state.selectedInputHistoryIndex + 1);
+    commit(types.INPUT_CHANGED, state.inputHistory[state.selectedInputHistoryIndex]);
+  } else if (value && value === 'down' && state.selectedInputHistoryIndex > 0) {
+    commit(types.SET_SELECTED_INPUT_HISTORY, state.selectedInputHistoryIndex - 1);
+    commit(types.INPUT_CHANGED, state.inputHistory[state.selectedInputHistoryIndex]);
+  } else {
+    console.log('you reach the history index limit');
+  }
+};
 
 export const changeInputText = function({ dispatch, commit, state }, value) {
   commit(types.INPUT_CHANGED, value);
+  commit(types.UPDDATE_INPUT_HISTORY_ITEM, value);
   dispatch('loadCommandSuggestions');
   dispatch('loadInputSuggestions');
 };
@@ -60,22 +77,6 @@ export const sendUserMessage = function({ dispatch, commit, state }) {
 
 };
 
-export const sendAudioUserMessage = function({ commit, state, dispatch }) {
-  let id = uuid4();
-  let now = new moment().toISOString();
-  let userMessage = {
-    ...messageCaseClass,
-    id: id,
-    content: state.input,
-    contentType: 'audio',
-    state: null,
-    createdDatetime: now,
-  };
-  commit(types.ADD_MESSAGE, userMessage);
-  commit(types.INPUT_TYPE_CHANGED, 'text');
-  dispatch('processMessage', userMessage);
-  dispatch('changeInputText', '');
-};
 
 export const sendTextUserMessage = function({ commit, state, dispatch }) {
   let id = uuid4();
@@ -90,7 +91,8 @@ export const sendTextUserMessage = function({ commit, state, dispatch }) {
   };
   commit(types.ADD_MESSAGE, userMessage);
   dispatch('processMessage', userMessage);
-  commit(types.INPUT_CHANGED, '');
+  dispatch('clearInput', userMessage);
+
 };
 
 
@@ -127,4 +129,33 @@ const messageCaseClass = {
   sender: 'user',
   status: null,
   createdDatetime: null,
+};
+
+/// for simplicity of implimention for now we handle recording in input-box component
+/// TODO: move recording to state
+export const startRecording = function({ commit, state }) {
+  commit(types.INPUT_TYPE_CHANGED, 'audio');
+  commit(types.TOGGLE_RECORDING);
+};
+
+export const stopRecording = function({ commit, state }, audio) {
+  commit(types.INPUT_CHANGED, audio);
+  commit(types.TOGGLE_RECORDING);
+};
+
+export const sendAudioUserMessage = function({ commit, state, dispatch }) {
+  let id = uuid4();
+  let now = new moment().toISOString();
+  let userMessage = {
+    ...messageCaseClass,
+    id: id,
+    content: state.input,
+    contentType: 'audio',
+    state: null,
+    createdDatetime: now,
+  };
+  commit(types.ADD_MESSAGE, userMessage);
+  commit(types.INPUT_TYPE_CHANGED, 'text');
+  dispatch('processMessage', userMessage);
+  dispatch('changeInputText', '');
 };

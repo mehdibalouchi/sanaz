@@ -6,3 +6,5 @@ export const ADD_MESSAGE = 'addMessage';
 export const REMOVE_MESSAGE = 'messagePrccessed';
 export const TOGGLE_RECORDING = 'toggleRecording';
 export const ADD_INPUT_HISTORY = 'addInputHistory';
+export const UPDDATE_INPUT_HISTORY_ITEM = 'updateInputHistoryItem';
+export const SET_SELECTED_INPUT_HISTORY = 'setSelectedInputHistory';
