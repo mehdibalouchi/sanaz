@@ -1,18 +1,12 @@
 <template>
-
     <v-layout justify-space-around row wrap>
         <v-flex xs9 pl-3>
-            <AudioInput v-if="inputType === 'audio'"></AudioInput>
             <AutoCompleteTextInput v-if="inputType === 'text'"></AutoCompleteTextInput>
         </v-flex>
         <v-flex xs2>
             <v-btn fab dark color="indigo" v-if="showSend" @click="sendUserMessage">
                 <img :src="sendUrl" alt="" width="20px" height="20px">
             </v-btn>
-            <!--<v-btn fab dark :color="isRecording?'red':'indigo'" v-if="!showSend"-->
-            <!--v-on:click.stop.prevent="toggleRecording">-->
-            <!--<img :src="micUrl" alt="" width="20px" height="20px">-->
-            <!--</v-btn>-->
             <v-btn v-if="!showSend"
                    dark
                    @click.stop.prevent="toggle ? endSpeechRecognition() : startSpeechRecognition()"
@@ -24,14 +18,12 @@
         </v-flex>
 
     </v-layout>
-
-
 </template>
 
 <script>
   import AutoCompleteTextInput from './AutoCompleteTextInput.vue?shadow';
   import AudioInput from './AudioInput.vue?shadow';
-  import { mapActions, mapGetters, mapState } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
 
   let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition = SpeechRecognition ? new SpeechRecognition() : false;
