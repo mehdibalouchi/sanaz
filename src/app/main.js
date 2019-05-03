@@ -10,15 +10,13 @@ import Vuetify from 'vuetify';
 
 Vue.use(Vuetify);
 
-let showSanaz = false;
 Vue.prototype.$browser = global.browser;
 window.Vue = Vue;
 const CustomElement = wrap(Vue, App);
 window.customElements.define('my-sanaz', CustomElement);
 let root = document.createElement('my-sanaz');
-console.log(showSanaz);
 root.setAttribute('style', `
-        display: ${showSanaz ? 'block' : 'none' };
+        display:'none';
         background-color: white;
         position: fixed;
         top: 10%;
@@ -35,13 +33,12 @@ document.body.appendChild(root);
 
 
 chrome.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
-  // do something with msgObj
-  console.log(msgObj);
+  let sanazElement = document.getElementById('sanaz-container');
+  let showSanaz = sanazElement && sanazElement.style.display === 'block';
   if (msgObj.hasOwnProperty('event') && msgObj.event === 'toggle') {
     showSanaz = !showSanaz;
-    let sanazElement = document.getElementById('sanaz-container');
     sanazElement.style.display = showSanaz ? 'block' : 'none';
-    sanazElement.show = 'true';
+    sanazElement.show = showSanaz ? 'true' : 'none';
   }
   sendResponse({ farewell: showSanaz ? 'Hi' : 'Goodbye' });
 });

@@ -1,6 +1,7 @@
 <template>
     <v-toolbar>
-        <v-toolbar-title>Sanaz</v-toolbar-title>
+        <v-toolbar-side-icon @click="collapse">-</v-toolbar-side-icon>
+        <!--<v-toolbar-title>-</v-toolbar-title>-->
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
             <v-btn small flat>
@@ -22,12 +23,21 @@
       return {
         undoUrl: null,
         redoUrl: null,
+        showSanaz: true,
       };
 
     },
     mounted: function() {
       this.redoUrl = chrome.extension.getURL('assets/redo.svg');
       this.undoUrl = chrome.extension.getURL('assets/undo.svg');
+    },
+    methods: {
+      collapse() {
+        this.showSanaz = !this.showSanaz;
+        let sanazElement = document.getElementById('sanaz-container');
+        sanazElement.style.display = 'none';
+        sanazElement.show = 'none';
+      },
     },
   }
 </script>
