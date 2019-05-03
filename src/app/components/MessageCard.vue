@@ -30,8 +30,5 @@
 </script>
 
 <style scoped>
-    .message-card-container {
-        /*width: 100%;*/
-        /*min-height: 150px;*/
-    }
+
 </style>

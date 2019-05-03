@@ -17,7 +17,6 @@
         padding-left: 20px;
         padding-top: 25px;
         font-size: large;
-        /*text-align: right;*/
         min-height: 100px;
     }
 </style>

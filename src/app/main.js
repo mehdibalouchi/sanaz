@@ -8,9 +8,7 @@ import App from './App.vue?shadow';
 import wrap from '@vue/web-component-wrapper';
 import Vuetify from 'vuetify';
 
-Vue.use(Vuetify, {
-  iconfont: 'md',
-});
+Vue.use(Vuetify);
 
 let showSanaz = false;
 Vue.prototype.$browser = global.browser;

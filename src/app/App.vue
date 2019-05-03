@@ -1,15 +1,9 @@
 <template>
     <v-container pa-0 ma-0 v-if="show==='true'">
         <OptionBox></OptionBox>
-        <!--<v-container fluid grid-list-sm>-->
-        <Conversation style="max-height: 100%"></Conversation>
-        <!--</v-container>-->
-
+        <Conversation></Conversation>
         <CommandHint></CommandHint>
-
         <InputBox></InputBox>
-
-
     </v-container>
 
 </template>
