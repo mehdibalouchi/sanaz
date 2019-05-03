@@ -47,7 +47,8 @@
         /*justify-content: space-around;*/
         /*flex-direction: column;*/
         overflow: hidden;
-        height: 600px;
+        height: 500px;
+        /*max-height: 00px;*/
         overflow-y: scroll;
         overflow-wrap: break-word;
         /*width: 100%;*/

@@ -25,7 +25,6 @@ root.setAttribute('style', `
         position: fixed;
         top: 10%;
         right: 0;
-        // height: 800px;
         width: 65%;
         max-width: 400px;
         padding: 0px;
