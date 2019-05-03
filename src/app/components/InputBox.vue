@@ -9,8 +9,16 @@
             <v-btn fab dark color="indigo" v-if="showSend" @click="sendUserMessage">
                 <img :src="sendUrl" alt="" width="20px" height="20px">
             </v-btn>
-            <v-btn fab dark :color="isRecording?'red':'indigo'" v-if="!showSend"
-                   v-on:click.stop.prevent="toggleRecording">
+            <!--<v-btn fab dark :color="isRecording?'red':'indigo'" v-if="!showSend"-->
+            <!--v-on:click.stop.prevent="toggleRecording">-->
+            <!--<img :src="micUrl" alt="" width="20px" height="20px">-->
+            <!--</v-btn>-->
+            <v-btn v-if="!showSend"
+                   dark
+                   @click.stop.prevent="toggle ? endSpeechRecognition() : startSpeechRecognition()"
+                   icon
+                   :color="!toggle ? 'grey' : (speaking ? 'red' : 'red darken-3')"
+                   :class="{'animated infinite pulse': toggle}">
                 <img :src="micUrl" alt="" width="20px" height="20px">
             </v-btn>
         </v-flex>
@@ -25,16 +33,22 @@
   import AudioInput from './AudioInput.vue?shadow';
   import { mapActions, mapGetters, mapState } from 'vuex';
 
+  let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = SpeechRecognition ? new SpeechRecognition() : false;
+
   export default {
     name: 'InputBox',
     data: function() {
       return {
-        isRecording: false,
-        audioRecorder: null,
-        recordingData: [],
         dataUrl: '',
         sendUrl: null,
         micUrl: null,
+        error: false,
+        speaking: false,
+        toggle: false,
+        runtimeTranscription: '',
+        sentences: [],
+        lang: 'en-US',
       };
     },
     components: {
@@ -42,45 +56,63 @@
       AudioInput,
     },
     methods: {
-      ...mapActions(['sendUserMessage', 'startRecording', 'stopRecording', 'sendAudioUserMessage']),
-      toggleRecording: function() {
-        this.isRecording = !this.isRecording;
-        if (this.isRecording) {
-          // navigator.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia;
+      ...mapActions(['sendUserMessage', 'startRecording', 'stopRecording', 'sendAudioUserMessage', 'changeInputText']),
+      checkCompatibility() {
+        if (!recognition) {
+          this.error = 'Speech Recognition is not available on this browser. Please use Chrome or Firefox';
+        }
+      },
+      endSpeechRecognition() {
+        recognition.stop();
+        this.toggle = false;
+      },
+      startSpeechRecognition() {
+        if (!recognition) {
+          this.error = 'Speech Recognition is not available on this browser. Please use Chrome or Firefox';
+          return false;
+        }
+        this.toggle = true;
+        recognition.lang = this.lang;
+        recognition.interimResults = true;
 
-          navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: false,
-          }).then((stream) => {
-            // this.stream = stream;
-            this.audioRecorder = new MediaRecorder(stream, {
-              mimeType: 'audio/webm',
-              audioBitsPerSecond: 96000,
-            });
-            this.audioRecorder.start();
-            console.log('Media recorder started');
-          }).catch((error) => {
-            console.log(error);
-            this.isRecording = !this.isRecording;
-          });
-        }
-        else {
-          this.audioRecorder.stop();
-          this.audioRecorder.ondataavailable = function(event) {
-            this.recordingData.push(event.data);
-          };
-          this.audioRecorder.onstop = function(event) {
-            console.log('Media recorder stopped');
-            var blob = new Blob(that.recordingData, { type: 'audio/ogg' });
-            this.dataUrl = window.URL.createObjectURL(blob);
-          };
-        }
+        recognition.addEventListener('speechstart', event => {
+          this.speaking = true;
+        });
+
+        recognition.addEventListener('speechend', event => {
+          this.speaking = false;
+        });
+
+        recognition.addEventListener('result', event => {
+          const text = Array.from(event.results).map(result => result[0]).map(result => result.transcript).join('');
+          this.runtimeTranscription = text;
+
+          console.log('its working');
+          this.changeInputText(text);
+        });
+
+        recognition.addEventListener('end', () => {
+          if (this.runtimeTranscription !== '') {
+            this.sentences.push(this.capitalizeFirstLetter(this.runtimeTranscription));
+            this.changeInputText(this.text + this.sentences.slice(-1)[0]);
+          }
+          this.runtimeTranscription = '';
+          recognition.stop();
+          if (this.toggle) {
+            // keep it going.
+            recognition.start();
+          }
+        });
+        recognition.start();
+      },
+      capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
       },
     },
     computed: {
       ...mapState(['inputType', 'input']),
       showSend: function() {
-        if (this.input && typeof this.input === 'string' && this.input.length > 0)
+        if (!this.toggle && this.input && typeof this.input === 'string' && this.input.length > 0)
           return true;
       },
 

@@ -7,7 +7,8 @@ export const state = {
   isAudioRecording: false,
   commandSuggestions: [],
   inputSuggestions: [],
-  history: []
+  history: [],
+  inputHistory: [],
 };
 
 // mutations
@@ -29,6 +30,9 @@ export const mutations = {
   },
   [types.ADD_MESSAGE](state, value) {
     state.history = [...state.history, value];
+  },
+  [types.ADD_INPUT_HISTORY](state, value) {
+    state.inputHistory = [value, ...state.history.slice(0, 6)];
   },
   [types.REMOVE_MESSAGE](state, messageId) {
     state.history = [...state.history.filter((item)=>item.id !== messageId)]
