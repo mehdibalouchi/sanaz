@@ -31,6 +31,16 @@ root.setAttribute('id', 'sanaz-container');
 root.setAttribute('show', 'false');
 document.body.appendChild(root);
 
+window.addEventListener('message', function(event) {
+  // We only accept messages from ourselves
+  if (event.source != window)
+    return;
+
+  if (event.data.type && (event.data.type == 'FROM_APP_TFXI')) {
+    console.log('Sanaz received: ' + JSON.stringify(event.data));
+  }
+}, false);
+
 
 chrome.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
   let sanazElement = document.getElementById('sanaz-container');

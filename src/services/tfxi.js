@@ -78,6 +78,7 @@ export const processInput = function(input) {
 
 const runAction = function(command, params) {
   console.log(`hello im sanaz and doing ${command} for you!`);
+  window.postMessage({ type: 'FROM_SANAZ', id: 'master pls implement me', action: 'run' }, '*');
   return availableCommand[command].func(...params);
 };
 

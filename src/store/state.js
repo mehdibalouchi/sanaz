@@ -8,7 +8,7 @@ export const state = {
   commandSuggestions: [],
   inputSuggestions: [],
   history: [],
-  inputHistory: [],
+  inputHistory: [''],
   selectedInputHistoryIndex: null,
   inputHistoryLimit: 5,
 };
@@ -16,7 +16,9 @@ export const state = {
 // mutations
 export const mutations = {
   [types.INPUT_CHANGED](state, value) {
-    state.input = value;
+    if (value) {
+      state.input = value;
+    }
   },
   [types.INPUT_TYPE_CHANGED](state, value) {
     state.inputType = value;
