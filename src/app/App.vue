@@ -1,12 +1,10 @@
 <template>
-    <v-app v-if="show==='true'">
-        <v-container pa-0 ma-0>
-            <OptionBox></OptionBox>
-            <Conversation></Conversation>
-            <CommandHint></CommandHint>
-            <InputBox></InputBox>
-        </v-container>
-    </v-app>
+    <v-container pa-0 ma-0>
+        <OptionBox></OptionBox>
+        <Conversation></Conversation>
+        <CommandHint></CommandHint>
+        <InputBox></InputBox>
+    </v-container>
 </template>
 
 <script>

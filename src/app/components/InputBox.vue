@@ -1,20 +1,29 @@
 <template>
     <v-layout justify-space-around row wrap>
-        <v-flex xs9 pl-3>
+        <v-flex xs10 pl-3>
             <AutoCompleteTextInput v-if="inputType === 'text'"></AutoCompleteTextInput>
         </v-flex>
-        <v-flex xs2>
-            <v-btn fab dark color="indigo" v-if="showSend" @click="sendUserMessage">
-                <img :src="sendUrl" alt="" width="20px" height="20px">
-            </v-btn>
-            <v-btn v-if="!showSend"
-                   dark
-                   @click.stop.prevent="toggle ? endSpeechRecognition() : startSpeechRecognition()"
-                   icon
-                   :color="!toggle ? 'grey' : (speaking ? 'red' : 'red darken-3')"
-                   :class="{'animated infinite pulse': toggle}">
-                <img :src="micUrl" alt="" width="20px" height="20px">
-            </v-btn>
+        <v-flex xs2 justify-center row wrap>
+            <div style="margin-top: 15%">
+                <v-btn
+                        icon dark color="indigo"
+                        v-if="showSend"
+                        @click="sendUserMessage"
+                >
+                    <img :src="sendUrl" alt="" width="16px" height="16px">
+                </v-btn>
+                <v-btn
+                        v-if="!showSend"
+                        dark
+                        @click.stop.prevent="toggle ? endSpeechRecognition() : startSpeechRecognition()"
+                        icon
+                        :color="!toggle ? 'grey' : (speaking ? 'red' : 'red darken-3')"
+                        :class="{'animated infinite pulse': toggle}"
+                >
+                    <img :src="micUrl" alt="" width="16px" height="16px">
+                </v-btn>
+            </div>
+
         </v-flex>
 
     </v-layout>
@@ -113,7 +122,7 @@
       this.checkCompatibility();
       this.sendUrl = chrome.extension.getURL('assets/send.svg');
       this.micUrl = chrome.extension.getURL('assets/microphone.svg');
-      this.clearInput();
+      // this.clearInput();
     },
   };
 </script>

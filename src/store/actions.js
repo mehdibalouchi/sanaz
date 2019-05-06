@@ -80,7 +80,7 @@ export const sendUserMessage = function({ dispatch, commit, state }) {
 
 export const sendTextUserMessage = function({ commit, state, dispatch }) {
   let id = uuid4();
-  let now = new moment().toISOString();
+  let now = moment().toISOString();
   let userMessage = {
     ...messageCaseClass,
     id: id,
@@ -98,7 +98,7 @@ export const sendTextUserMessage = function({ commit, state, dispatch }) {
 
 export const sendTextBotMessage = function({ commit, state, getters }, { message, messageType }) {
   let id = uuid4();
-  let now = new moment().toISOString();
+  let now = moment().toISOString();
   let botMessage = {
     ...messageCaseClass,
     id: id,
@@ -145,7 +145,7 @@ export const stopRecording = function({ commit, state }, audio) {
 
 export const sendAudioUserMessage = function({ commit, state, dispatch }) {
   let id = uuid4();
-  let now = new moment().toISOString();
+  let now = moment().toISOString();
   let userMessage = {
     ...messageCaseClass,
     id: id,

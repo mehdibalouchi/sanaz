@@ -12,7 +12,7 @@
                   v-on:keypress.up.stop.prevent=""
                   v-on:keyup.down.stop.prevent="navigateCommandHistory('down')"
                   v-on:keydown.down.stop.prevent=""
-                  v-on:keypress.dow.stop.prevent=""
+                  v-on:keypress.down.stop.prevent=""
                   v-model="textInput"
                   :hint="getSuggestedInput"
                   persistent-hint></v-text-field>

@@ -9,16 +9,15 @@ export const state = {
   inputSuggestions: [],
   history: [],
   inputHistory: [''],
-  selectedInputHistoryIndex: null,
+  selectedInputHistoryIndex: 0,
   inputHistoryLimit: 5,
+  availableCommand: [],
 };
 
 // mutations
 export const mutations = {
   [types.INPUT_CHANGED](state, value) {
-    if (value) {
       state.input = value;
-    }
   },
   [types.INPUT_TYPE_CHANGED](state, value) {
     state.inputType = value;

@@ -10,15 +10,14 @@ export const textToCommand = {
 };
 
 export const availableCommand = {
-  'formatCells': {
-    func: (cells, formatType) => {
-      console.log(`formatting ${cells} to ${formatType}!`);
-      return null;
-    },
-    hint: 'format [cells] as [formatType]',
-    sample: 'format A1:A3 date',
-    returnType: null,
-  },
+  // 'formatCells': {
+  //   id:'text',
+  //   command: '',
+  //   args: [''],
+  //   hint: 'format [cells] as [formatType]',
+  //   sample: 'format A1:A3 date',
+  //   voiceContext: [],
+  // },
   'getCells': {
     sample: 'A1:A2',
     func: (cells) => {
@@ -78,8 +77,8 @@ export const processInput = function(input) {
 
 const runAction = function(command, params) {
   console.log(`hello im sanaz and doing ${command} for you!`);
-  window.postMessage({ type: 'FROM_SANAZ', id: 'master pls implement me', action: 'run' }, '*');
-  return availableCommand[command].func(...params);
+  // window.postMessage({ type: 'FROM_SANAZ', id: 'master pls implement me', action: 'run' }, '*');
+  // return availableCommand[command].func(...params);
 };
 
 const responseFactory = (command, commandResult) => {
