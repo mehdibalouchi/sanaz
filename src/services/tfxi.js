@@ -73,11 +73,11 @@ export const getInputSuggetions = (input) => {
 export const processInput = function(input, tfx) {
   let address = 'http://localhost:5000';
   return new Promise((resolve, reject) => {
-    discover(address, input, tfx)
+    discover(address, tfx, input)
       .then((result) => {
         console.log(result);
         // let { command, params } = commandFactory(input);
-        let commandResult = runAction(result.command, result.args);
+        let commandResult = runAction(result.command[0], result.params);
         resolve(responseFactory(commandResult));
       })
       .catch((err) => {
@@ -89,8 +89,9 @@ export const processInput = function(input, tfx) {
 
 
 const runAction = function(command, params) {
-  // console.log(`hello im sanaz and doing ${command} for you!`);
-  window.postMessage({ type: 'FROM_SANAZ', command, params: Object.values(params) }, '*');
+  console.log(`hello im sanaz and doing ${command} for you!`);
+  console.log(params);
+  window.postMessage({ 'type': 'FROM_SANAZ', command, 'params': params }, '*');
 };
 
 const responseFactory = (commandResult) => {

@@ -113,7 +113,7 @@ export const sendTextBotMessage = function({ commit, state, getters }, { message
 };
 
 export const processMessage = function({ commit, state, dispatch }, userMessage) {
-  processInput(userMessage.content, state.tfx)
+  processInput(userMessage.content, TFX_SAMPLE)
     .then((result) => {
       commit(types.REMOVE_MESSAGE, userMessage.id);
       commit(types.ADD_MESSAGE, { ...userMessage, status: true });

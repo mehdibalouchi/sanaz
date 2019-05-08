@@ -13,7 +13,7 @@ export const state = {
   selectedInputHistoryIndex: 0,
   inputHistoryLimit: 5,
   availableCommand: [],
-  state: TFX_SAMPLE,
+  tfx: TFX_SAMPLE,
 };
 
 // mutations
