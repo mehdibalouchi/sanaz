@@ -1,3 +1,5 @@
+import { testConnection, discover } from './discovery';
+
 export const textToCommand = {
   'format A1:A3 date': {
     command: 'formatCells',
@@ -69,6 +71,14 @@ export const getInputSuggetions = (input) => {
 };
 
 export const processInput = function(input) {
+  let address = 'http://localhost:5000';
+  discover(address, { 'command': 'sort' }, 'sort sone fucking shit ascending')
+    .then((msg) => {
+      console.log(msg);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   let { command, params } = commandFactory(input);
   let commandResult = runAction(command, params);
   return responseFactory(command, commandResult);
@@ -77,7 +87,7 @@ export const processInput = function(input) {
 
 const runAction = function(command, params) {
   console.log(`hello im sanaz and doing ${command} for you!`);
-  // window.postMessage({ type: 'FROM_SANAZ', id: 'master pls implement me', action: 'run' }, '*');
+  window.postMessage({ type: 'FROM_SANAZ', id: 'master pls implement me', action: 'run' }, '*');
   // return availableCommand[command].func(...params);
 };
 

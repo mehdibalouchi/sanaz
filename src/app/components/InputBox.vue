@@ -1,7 +1,7 @@
 <template>
     <v-layout justify-space-around row wrap>
         <v-flex xs10 pl-3>
-            <AutoCompleteTextInput v-if="inputType === 'text'"></AutoCompleteTextInput>
+            <AutoCompleteTextInput :input-p="final_transcript" v-if="inputType === 'text'"></AutoCompleteTextInput>
         </v-flex>
         <v-flex xs2 justify-center row wrap>
             <div style="margin-top: 15%">
@@ -15,7 +15,8 @@
                 <v-btn
                         v-if="!showSend"
                         dark
-                        @click.stop.prevent="toggle ? endSpeechRecognition() : startSpeechRecognition()"
+                        @mousedown.stop.prevent="startSpeechRecognition"
+                        @mouseup.stop.prevent="endSpeechRecognition"
                         icon
                         :color="!toggle ? 'grey' : (speaking ? 'red' : 'red darken-3')"
                         :class="{'animated infinite pulse': toggle}"
@@ -50,6 +51,8 @@
         runtimeTranscription: '',
         sentences: [],
         lang: 'en-US',
+        final_transcript: '',
+        interim_transcript: '',
       };
     },
     components: {
@@ -65,16 +68,17 @@
       },
       endSpeechRecognition() {
         recognition.stop();
+        this.final_transcript = '';
         this.toggle = false;
       },
-      startSpeechRecognition() {
+      recognitionStartHandler() {
         if (!recognition) {
           this.error = 'Speech Recognition is not available on this browser. Please use Chrome or Firefox';
           return false;
         }
-        this.toggle = true;
         recognition.lang = this.lang;
         recognition.interimResults = true;
+        recognition.continuous = true;
 
         recognition.addEventListener('speechstart', event => {
           this.speaking = true;
@@ -85,25 +89,25 @@
         });
 
         recognition.addEventListener('result', event => {
-          const text = Array.from(event.results).map(result => result[0]).map(result => result.transcript).join('');
-          this.runtimeTranscription = text;
+          this.interim_transcript = '';
 
-          console.log('its working');
-          this.changeInputText(text);
-        });
+          for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              this.final_transcript += event.results[i][0].transcript;
+              this.changeInputText(this.final_transcript);
 
-        recognition.addEventListener('end', () => {
-          if (this.runtimeTranscription !== '') {
-            this.sentences.push(this.capitalizeFirstLetter(this.runtimeTranscription));
-            this.changeInputText(this.text + this.sentences.slice(-1)[0]);
-          }
-          this.runtimeTranscription = '';
-          recognition.stop();
-          if (this.toggle) {
-            // keep it going.
-            recognition.start();
+            } else {
+              this.interim_transcript += event.results[i][0].transcript;
+              this.changeInputText(this.interim_transcript);
+            }
           }
         });
+
+      },
+      startSpeechRecognition() {
+        this.toggle = true;
+        this.interim_transcript = '';
+        this.final_transcript = '';
         recognition.start();
       },
       capitalizeFirstLetter(string) {
@@ -122,6 +126,7 @@
       this.checkCompatibility();
       this.sendUrl = chrome.extension.getURL('assets/send.svg');
       this.micUrl = chrome.extension.getURL('assets/microphone.svg');
+      this.recognitionStartHandler();
       // this.clearInput();
     },
   };

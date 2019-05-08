@@ -28,7 +28,7 @@ root.setAttribute('style', `
         z-index: 9999999999999999 ;`);
 root.setAttribute('id', 'sanaz-container');
 
-root.setAttribute('show', 'false');
+root.setAttribute('show', 'true');
 document.body.appendChild(root);
 
 window.addEventListener('message', function(event) {
@@ -36,7 +36,7 @@ window.addEventListener('message', function(event) {
   if (event.source != window)
     return;
 
-  if (event.data.type && (event.data.type == 'FROM_APP_TFXI')) {
+  if (event.data.type && (event.data.type == 'TFXI_HANDSHAKEُ')) {
     console.log('Sanaz received: ' + JSON.stringify(event.data));
   }
 }, false);
@@ -44,8 +44,8 @@ window.addEventListener('message', function(event) {
 
 chrome.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
   let sanazElement = document.getElementById('sanaz-container');
-  let showSanaz = sanazElement && sanazElement.style.display === 'block';
   if (msgObj.hasOwnProperty('event') && msgObj.event === 'toggle') {
+    let showSanaz = sanazElement.style.display == 'block';
     showSanaz = !showSanaz;
     sanazElement.style.display = showSanaz ? 'block' : 'none';
     sanazElement.show = showSanaz ? 'true' : 'none';
