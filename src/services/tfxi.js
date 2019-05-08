@@ -70,29 +70,31 @@ export const getInputSuggetions = (input) => {
   return [];
 };
 
-export const processInput = function(input) {
+export const processInput = function(input, tfx) {
   let address = 'http://localhost:5000';
-  discover(address, { 'command': 'sort' }, 'sort sone fucking shit ascending')
-    .then((msg) => {
-      console.log(msg);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  let { command, params } = commandFactory(input);
-  let commandResult = runAction(command, params);
-  return responseFactory(command, commandResult);
+  return new Promise((resolve, reject) => {
+    discover(address, input, tfx)
+      .then((result) => {
+        console.log(result);
+        // let { command, params } = commandFactory(input);
+        let commandResult = runAction(result.command, result.args);
+        resolve(responseFactory(commandResult));
+      })
+      .catch((err) => {
+        console.log(err);
+        reject();
+      });
+  });
 };
 
 
 const runAction = function(command, params) {
-  console.log(`hello im sanaz and doing ${command} for you!`);
-  window.postMessage({ type: 'FROM_SANAZ', id: 'master pls implement me', action: 'run' }, '*');
-  // return availableCommand[command].func(...params);
+  // console.log(`hello im sanaz and doing ${command} for you!`);
+  window.postMessage({ type: 'FROM_SANAZ', command, params: Object.values(params) }, '*');
 };
 
-const responseFactory = (command, commandResult) => {
-  return { message: commandResult, messageType: availableCommand[command].returnType };
+const responseFactory = (commandResult) => {
+  return { message: commandResult, messageType: 'text' };
 };
 
 const commandFactory = (input) => {

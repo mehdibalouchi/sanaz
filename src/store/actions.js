@@ -1,5 +1,6 @@
 import uuid4 from 'uuid/v4';
 import moment from 'moment';
+import TFX_SAMPLE from '../assets/tfx-sample';
 
 import * as types from './mutation-types';
 import { getCommandSuggetions, getInputSuggetions, getSample, processInput } from '../services/tfxi';
@@ -112,13 +113,14 @@ export const sendTextBotMessage = function({ commit, state, getters }, { message
 };
 
 export const processMessage = function({ commit, state, dispatch }, userMessage) {
-  let result = processInput(userMessage.content);
-  commit(types.REMOVE_MESSAGE, userMessage.id);
-  commit(types.ADD_MESSAGE, { ...userMessage, status: true });
-  if (result.message && result.messageType) {
-    dispatch('sendTextBotMessage', { message: result.message, messageType: result.messageType });
-  }
-
+  processInput(userMessage.content, state.tfx)
+    .then((result) => {
+      commit(types.REMOVE_MESSAGE, userMessage.id);
+      commit(types.ADD_MESSAGE, { ...userMessage, status: true });
+      if (result.message && result.messageType) {
+        dispatch('sendTextBotMessage', { message: result.message, messageType: result.messageType });
+      }
+    });
 };
 
 

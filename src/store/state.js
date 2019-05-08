@@ -1,4 +1,5 @@
 import * as types from './mutation-types';
+import TFX_SAMPLE from '../assets/tfx-sample';
 
 // initial state
 export const state = {
@@ -12,6 +13,7 @@ export const state = {
   selectedInputHistoryIndex: 0,
   inputHistoryLimit: 5,
   availableCommand: [],
+  state: TFX_SAMPLE,
 };
 
 // mutations
