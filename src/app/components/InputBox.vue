@@ -69,7 +69,10 @@
       endSpeechRecognition() {
         recognition.stop();
         this.final_transcript = '';
-        this.toggle = false;
+        setTimeout(() => {
+          this.toggle = false;
+        }, 300);
+
       },
       recognitionStartHandler() {
         if (!recognition) {
