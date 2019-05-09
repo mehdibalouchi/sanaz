@@ -20,6 +20,8 @@ export const clearInput = function({ commit, state, dispatch }) {
   }
   commit(types.SET_SELECTED_INPUT_HISTORY, 0);
   commit(types.INPUT_CHANGED, '');
+  dispatch('loadCommandSuggestions');
+  dispatch('loadInputSuggestions');
 };
 
 export const navigateCommandHistory = function({ dispatch, commit, state, getters }, value) {

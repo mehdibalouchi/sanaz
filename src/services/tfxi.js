@@ -49,24 +49,42 @@ export const inputSuggestions = Object.keys(availableCommand).reduce(function(re
 }, []);
 
 
-export const commandSuggestions = Object.keys(availableCommand).reduce(function(result, key) {
-  result.push({ sample: availableCommand[key].sample, hint: availableCommand[key].hint });
-  return result;
-}, []);
+export const commandSuggestions = [
+  'format X to date',
+  'format X to date',
+  'format column X to date',
+  'format column X to text',
+  'format row x to date',
+  'format row x to text',
+  'sort column B ascending',
+  'sort column D descending',
+  'delete row X',
+  'delete row X',
+  'delete column X',
+  'insert column before X',
+  'inset row before X',
+  'select XX:XX',
+  'select X',
+];
+
+export const badOfWord = [
+  'format', 'date', 'to', 'as', 'date', 'text', 'A', 'B', 'C', 'D', 'E', '1', '2', '3', '4', '5', '6', '7', '8', 'inset', 'delete', 'before',
+  'after', 'sort', 'column', 'row', 'ascending', 'descending',
+];
 
 export const getCommandSuggetions = (input) => {
-  return commandSuggestions.filter(({ hint }) => hint.includes(input)).map((item) => item.hint);
+  return commandSuggestions.filter((hint) => hint.includes(input));
 };
 
 export const getSample = (hint) => {
-  let item = commandSuggestions.find((value) => value.hint === hint);
-  return item.sample;
+  let item = commandSuggestions.find((value) => value === hint);
+  return item;
 };
 
 export const getInputSuggetions = (input) => {
   let searchString = input.split(' ').slice(-1)[0];
-  if (searchString && searchString.length > 0)
-    return inputSuggestions.filter((item) => String(item).startsWith(String(searchString)));
+  if (searchString && searchString.length > 0 && input.length > 0)
+    return badOfWord.filter((item) => String(item).startsWith(String(searchString)));
   return [];
 };
 
