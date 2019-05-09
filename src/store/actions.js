@@ -46,19 +46,20 @@ export const changeInputText = function({ dispatch, commit, state }, value) {
 
 export const setSuggestedCommand = function({ dispatch, commit, state, getters }) {
   if (getters.getSuggestedCommand !== '') {
-    let sample = getSample(getters.getSuggestedCommand);
-    commit(types.INPUT_CHANGED, sample);
-    dispatch('loadCommandSuggestions');
-    dispatch('loadInputSuggestions');
+    dispatch('changeInputText', getters.getSuggestedCommand);
   }
 
 };
 
 export const setSugesstedInput = function({ dispatch, commit, state, getters }) {
   if (getters.getSuggestedItem !== '') {
-    commit(types.INPUT_CHANGED, getters.getSuggestedInput);
-    dispatch('loadCommandSuggestions');
-    dispatch('loadInputSuggestions');
+    let part = state.input.split(' ').slice(0, -1).join(' ') + ' ';
+    if (part === ' ') {
+      part = '';
+    }
+    console.log(part);
+    console.log(getters.getSuggestedInput);
+    dispatch('changeInputText', part + getters.getSuggestedInput);
   }
 
 };
@@ -87,11 +88,8 @@ export const sendTextUserMessage = function({ commit, state, dispatch }) {
     createdDatetime: now,
   };
   commit(types.ADD_MESSAGE, userMessage);
-  //
   dispatch('clearInput', userMessage);
   dispatch('processMessage', userMessage);
-
-
 };
 
 

@@ -1,4 +1,5 @@
 import { testConnection, discover } from './discovery';
+import FuzzySearch from 'fuzzy-search';
 
 export const textToCommand = {
   'format A1:A3 date': {
@@ -48,32 +49,103 @@ export const inputSuggestions = Object.keys(availableCommand).reduce(function(re
   return result.concat([...availableCommand[key].sample.split(' '), ...availableCommand[key].hint.split(' ')]);
 }, []);
 
+const commandPatterns = [];
+
+const cellPatterGenerator = () => {
+  let cellNames = [];
+  let letters = ['A', 'a', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'f', 'F'];
+  let numbers = ['1', '2', '3', '4', '5', '6', '7'];
+  for (let l of letters) {
+    for (let n of numbers) {
+      cellNames.push(l + n);
+    }
+  }
+  return [...letters, ...numbers, ...cellNames];
+};
+
+let cells = cellPatterGenerator();
+
+const formatPatternGenerator = () => {
+  let format_samples = [];
+  for (let a of ['', 'column', 'row']) {
+    for (let b of cells) {
+      for (let c of ['', 'to', 'as']) {
+        for (let d of ['date', 'text']) {
+          format_samples.push({ command: `format${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}${d === '' ? '' : ' '}${d}` });
+        }
+      }
+    }
+  }
+  return format_samples;
+};
+
+let formatPatterns = formatPatternGenerator();
+
+const sortPatternGenerator = () => {
+  let samples = [];
+  for (let a of ['', 'column']) {
+    for (let b of cells) {
+      for (let c of ['descending', 'ascending']) {
+        samples.push({ command: `sort${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}` });
+      }
+    }
+  }
+  return samples;
+};
+
+let sortPatterns = sortPatternGenerator();
+
+const deleteSelectPatternGenerator = () => {
+  let samples = [];
+  for (let a of ['', 'column', 'row']) {
+    for (let b of cells) {
+      for (let c of ['descending', 'ascending']) {
+        for (let command of ['inset', 'delete'])
+          samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}` });
+      }
+    }
+  }
+  return samples;
+};
+
+let deleteSelectPatterns = deleteSelectPatternGenerator();
+
+const insetPatternGenerator = () => {
+  let samples = [];
+  for (let a of ['before', 'after']) {
+    for (let b of ['', 'column', 'row']) {
+      for (let c of cells) {
+        for (let command of ['insert'])
+          samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}` });
+      }
+    }
+  }
+  return samples;
+};
+
+let insetPatterns = insetPatternGenerator();
 
 export const commandSuggestions = [
-  'format X to date',
-  'format X to date',
-  'format column X to date',
-  'format column X to text',
-  'format row x to date',
-  'format row x to text',
-  'sort column B ascending',
-  'sort column D descending',
-  'delete row X',
-  'delete row X',
-  'delete column X',
-  'insert column before X',
-  'inset row before X',
-  'select XX:XX',
-  'select X',
+  ...formatPatterns,
+  ...sortPatterns,
+  ...deleteSelectPatterns,
+  ...insetPatterns,
+
 ];
 
 export const badOfWord = [
-  'format', 'date', 'to', 'as', 'date', 'text', 'A', 'B', 'C', 'D', 'E', '1', '2', '3', '4', '5', '6', '7', '8', 'inset', 'delete', 'before',
+  'format', 'date', 'to', 'as', 'date', 'text', 'A', 'B', 'C', 'D', 'E', '1', '2', '3', '4', '5', '6', '7', '8', 'insert', 'delete', 'before',
   'after', 'sort', 'column', 'row', 'ascending', 'descending',
 ];
 
 export const getCommandSuggetions = (input) => {
-  return commandSuggestions.filter((hint) => hint.includes(input));
+  const searcher = new FuzzySearch(commandSuggestions, ['command'], {
+    caseSensitive: false,
+    sort: true,
+  });
+  let result = searcher.search(input);
+  // console.log(result[0]['command'])
+  return result.length > 0 ? [result[0]['command']] : [];
 };
 
 export const getSample = (hint) => {
