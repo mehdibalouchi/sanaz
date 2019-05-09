@@ -1,6 +1,6 @@
 <template>
 
-    <v-card mt-2 min-width="90%">
+    <v-card>
 
 
         <TextMessage v-if="message.contentType==='text'" :text="message.content"></TextMessage>

@@ -17,7 +17,7 @@
         padding: 15px;
         /*padding-top: 25px;*/
         /*font-size: large;*/
-        min-height: 100px;
+        min-height: 80px;
         word-break: break-all;
     }
 </style>
