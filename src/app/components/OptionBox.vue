@@ -1,17 +1,15 @@
 <template>
-    <v-toolbar style="background-color: #3a8eff">
+    <v-toolbar color="#3a8eff">
         <v-toolbar-side-icon @click="collapse"><img :src="minimize" alt="" width="20px" height="20px">
         </v-toolbar-side-icon>
         <!--<v-toolbar-title>-</v-toolbar-title>-->
         <v-spacer></v-spacer>
-        <v-toolbar-items class="hidden-sm-and-down">
-            <v-btn small flat>
-
-                <img :src="undoUrl" alt="" width="20px" height="20px">
+        <v-toolbar-items>
+            <v-btn small icon>
+                <img :src="undoUrl" alt="" width="15px" height="15px">
             </v-btn>
-            <v-btn small flat>
-
-                <img :src="redoUrl" alt="" width="20px" height="20px">
+            <v-btn small icon>
+                <img :src="redoUrl" alt="" width="15px" height="15px">
             </v-btn>
         </v-toolbar-items>
     </v-toolbar>
@@ -24,6 +22,7 @@
       return {
         undoUrl: null,
         redoUrl: null,
+        minimize: null,
         showSanaz: true,
       };
 

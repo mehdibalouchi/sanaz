@@ -1,5 +1,5 @@
 <template>
-    <div class="message">{{text}}</div>
+    <p class="message">{{text}}</p>
 </template>
 
 <script>
@@ -14,9 +14,10 @@
 <style scoped>
     .message {
         width: 100%;
-        padding-left: 20px;
-        padding-top: 25px;
-        font-size: large;
+        padding: 15px;
+        /*padding-top: 25px;*/
+        /*font-size: large;*/
         min-height: 100px;
+        word-break: break-all;
     }
 </style>

@@ -14,28 +14,22 @@ export const loadInputSuggestions = function({ commit, state }) {
 };
 
 export const clearInput = function({ commit, state, dispatch }) {
-  commit(types.INPUT_TYPE_CHANGED, 'text');
-  dispatch('openHistoryItem');
-  dispatch('loadCommandSuggestions');
-  dispatch('loadInputSuggestions');
-};
-
-
-export const openHistoryItem = function({ commit, state }) {
-  if (state.inputHistory[state.selectedInputHistoryIndex].length > 0) {
+  if (state.inputHistory[0].length > 0) {
+    commit(types.SET_SELECTED_INPUT_HISTORY, null);
     commit(types.ADD_INPUT_HISTORY, '');
-    commit(types.SET_SELECTED_INPUT_HISTORY, 0);
-    commit(types.INPUT_CHANGED, '');
   }
+  commit(types.SET_SELECTED_INPUT_HISTORY, 0);
+  commit(types.INPUT_CHANGED, '');
 };
 
-export const navigateCommandHistory = function({ commit, state, getters }, value) {
-  if (value && value === 'up' && state.selectedInputHistoryIndex < state.inputHistoryLimit) {
+export const navigateCommandHistory = function({ dispatch, commit, state, getters }, value) {
+  if (value && value === 'up' && state.selectedInputHistoryIndex <= state.inputHistoryLimit) {
     commit(types.SET_SELECTED_INPUT_HISTORY, state.selectedInputHistoryIndex + 1);
-    commit(types.INPUT_CHANGED, state.inputHistory[state.selectedInputHistoryIndex]);
+    dispatch('changeInputText', state.inputHistory[state.selectedInputHistoryIndex]);
+
   } else if (value && value === 'down' && state.selectedInputHistoryIndex > 0) {
     commit(types.SET_SELECTED_INPUT_HISTORY, state.selectedInputHistoryIndex - 1);
-    commit(types.INPUT_CHANGED, state.inputHistory[state.selectedInputHistoryIndex]);
+    dispatch('changeInputText', state.inputHistory[state.selectedInputHistoryIndex]);
   } else {
     console.log('you reach the history index limit');
   }
@@ -91,8 +85,10 @@ export const sendTextUserMessage = function({ commit, state, dispatch }) {
     createdDatetime: now,
   };
   commit(types.ADD_MESSAGE, userMessage);
-  dispatch('processMessage', userMessage);
+  //
   dispatch('clearInput', userMessage);
+  dispatch('processMessage', userMessage);
+
 
 };
 
@@ -146,18 +142,18 @@ export const stopRecording = function({ commit, state }, audio) {
 };
 
 export const sendAudioUserMessage = function({ commit, state, dispatch }) {
-  let id = uuid4();
-  let now = moment().toISOString();
-  let userMessage = {
-    ...messageCaseClass,
-    id: id,
-    content: state.input,
-    contentType: 'audio',
-    state: null,
-    createdDatetime: now,
-  };
-  commit(types.ADD_MESSAGE, userMessage);
-  commit(types.INPUT_TYPE_CHANGED, 'text');
-  dispatch('processMessage', userMessage);
-  dispatch('changeInputText', '');
+  // let id = uuid4();
+  // let now = moment().toISOString();
+  // let userMessage = {
+  //   ...messageCaseClass,
+  //   id: id,
+  //   content: state.input,
+  //   contentType: 'audio',
+  //   state: null,
+  //   createdDatetime: now,
+  // };
+  // commit(types.ADD_MESSAGE, userMessage);
+  // commit(types.INPUT_TYPE_CHANGED, 'text');
+  // dispatch('processMessage', userMessage);
+  // dispatch('changeInputText', '');
 };
