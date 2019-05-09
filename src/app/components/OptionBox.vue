@@ -1,6 +1,7 @@
 <template>
-    <v-toolbar>
-        <v-toolbar-side-icon @click="collapse">-</v-toolbar-side-icon>
+    <v-toolbar style="background-color: #3a8eff">
+        <v-toolbar-side-icon @click="collapse"><img :src="minimize" alt="" width="20px" height="20px">
+        </v-toolbar-side-icon>
         <!--<v-toolbar-title>-</v-toolbar-title>-->
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
@@ -30,6 +31,7 @@
     mounted: function() {
       this.redoUrl = chrome.extension.getURL('assets/redo.svg');
       this.undoUrl = chrome.extension.getURL('assets/undo.svg');
+      this.minimize = chrome.extension.getURL('assets/minimize.svg');
     },
     methods: {
       collapse() {

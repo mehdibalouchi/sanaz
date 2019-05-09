@@ -1,5 +1,5 @@
 <template>
-    <v-container mt-1 style="height: 50vh" class="scroll-y" ref="conversion">
+    <v-container mt-1 style="height: 50vh;background-color: #e1e2e1;" class="scroll-y" ref="conversion">
         <v-layout justify-center row wrap>
             <v-flex xs11 mt-4 row wrap v-for="message in sortedHistory" :key="message.id">
                 <MessageCard :message="message"></MessageCard>

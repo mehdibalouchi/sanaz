@@ -1,5 +1,5 @@
 <template>
-    <v-container pa-0 ma-0>
+    <v-container pa-0 ma-0 style="background-color: #f5f5f6">
         <OptionBox></OptionBox>
         <Conversation></Conversation>
         <CommandHint></CommandHint>

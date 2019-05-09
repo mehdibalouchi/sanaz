@@ -17,7 +17,7 @@ window.customElements.define('my-sanaz', CustomElement);
 let root = document.createElement('my-sanaz');
 root.setAttribute('style', `
         display:'none';
-        background-color: white;
+        background-color: #f5f5f6;
         position: fixed;
         top: 10%;
         right: 0;

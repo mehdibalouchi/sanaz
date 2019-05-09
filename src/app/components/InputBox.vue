@@ -6,20 +6,20 @@
         <v-flex xs2 justify-center row wrap>
             <div style="margin-top: 15%">
                 <v-btn
-                        icon dark color="indigo"
+                        icon
+                        color="#21dc78"
                         v-if="showSend"
                         @click="sendUserMessage"
                 >
                     <img :src="sendUrl" alt="" width="16px" height="16px">
                 </v-btn>
                 <v-btn
-                        v-if="!showSend"
                         dark
+                        v-if="!showSend"
                         @mousedown.stop.prevent="startSpeechRecognition"
                         @mouseup.stop.prevent="endSpeechRecognition"
                         icon
-                        :color="!toggle ? 'grey' : (speaking ? 'red' : 'red darken-3')"
-                        :class="{'animated infinite pulse': toggle}"
+                        :color="!toggle ? '#00a849' : (speaking ? '#21dc78' : '#21dc78')"
                 >
                     <img :src="micUrl" alt="" width="16px" height="16px">
                 </v-btn>
