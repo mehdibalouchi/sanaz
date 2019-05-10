@@ -99,10 +99,8 @@ const deleteSelectPatternGenerator = () => {
   let samples = [];
   for (let a of ['', 'column', 'row']) {
     for (let b of cells) {
-      for (let c of ['descending', 'ascending']) {
-        for (let command of ['inset', 'delete'])
-          samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}` });
-      }
+      for (let command of ['select', 'delete'])
+        samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}` });
     }
   }
   return samples;
@@ -161,7 +159,7 @@ export const getInputSuggetions = (input) => {
 };
 
 export const processInput = function(input, tfx) {
-  let address = 'http://localhost:5000';
+  let address = 'http://18.191.195.178:5000';
   return new Promise((resolve, reject) => {
     discover(address, tfx, input)
       .then((result) => {
