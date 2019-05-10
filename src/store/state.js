@@ -30,6 +30,9 @@ export const mutations = {
   [types.TOGGLE_RECORDING](state) {
     state.isAudioRecording = !state.isAudioRecording;
   },
+  [types.CLEAR_MESSAGE_HISTORY](state) {
+    state.history = [];
+  },
   [types.LOUD_COMMAND_SUGGESTION](state, value) {
     state.commandSuggestions = [...value];
   },

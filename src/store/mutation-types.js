@@ -8,3 +8,4 @@ export const TOGGLE_RECORDING = 'toggleRecording';
 export const ADD_INPUT_HISTORY = 'addInputHistory';
 export const UPDDATE_INPUT_HISTORY_ITEM = 'updateInputHistoryItem';
 export const SET_SELECTED_INPUT_HISTORY = 'setSelectedInputHistory';
+export const CLEAR_MESSAGE_HISTORY = 'clearMessageHistory';

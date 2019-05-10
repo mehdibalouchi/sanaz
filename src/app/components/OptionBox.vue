@@ -11,11 +11,16 @@
             <v-btn small icon>
                 <img :src="redoUrl" alt="" width="15px" height="15px">
             </v-btn>
+            <v-btn small @click="clearMessageHistory" icon>
+                <img :src="clear" alt="" width="15px" height="15px">
+            </v-btn>
         </v-toolbar-items>
     </v-toolbar>
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+
   export default {
     name: 'OptionBox',
     data() {
@@ -23,6 +28,7 @@
         undoUrl: null,
         redoUrl: null,
         minimize: null,
+        clear: null,
         showSanaz: true,
       };
 
@@ -31,8 +37,10 @@
       this.redoUrl = chrome.extension.getURL('assets/redo.svg');
       this.undoUrl = chrome.extension.getURL('assets/undo.svg');
       this.minimize = chrome.extension.getURL('assets/minimize.svg');
+      this.clear = chrome.extension.getURL('assets/clear.svg');
     },
     methods: {
+      ...mapActions(['clearMessageHistory']),
       collapse() {
         this.showSanaz = !this.showSanaz;
         let sanazElement = document.getElementById('sanaz-container');

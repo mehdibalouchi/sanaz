@@ -13,6 +13,10 @@ export const loadInputSuggestions = function({ commit, state }) {
   commit(types.LOUD_INPUT_SUGGESTION, getInputSuggetions(state.input));
 };
 
+export const clearMessageHistory = function({ commit }) {
+  commit(types.CLEAR_MESSAGE_HISTORY);
+};
+
 export const clearInput = function({ commit, state, dispatch }) {
   if (state.inputHistory[0].length > 0) {
     commit(types.SET_SELECTED_INPUT_HISTORY, null);
