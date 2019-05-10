@@ -1,4 +1,3 @@
-import { testConnection, discover } from './discovery';
 import FuzzySearch from 'fuzzy-search';
 
 export const textToCommand = {
