@@ -25,7 +25,7 @@ export const clearInput = function({ commit, state, dispatch }) {
 };
 
 export const navigateCommandHistory = function({ dispatch, commit, state, getters }, value) {
-  if (value && value === 'up' && state.selectedInputHistoryIndex <= state.inputHistoryLimit) {
+  if (value && value === 'up' && state.selectedInputHistoryIndex < state.inputHistory.length) {
     commit(types.SET_SELECTED_INPUT_HISTORY, state.selectedInputHistoryIndex + 1);
     dispatch('changeInputText', state.inputHistory[state.selectedInputHistoryIndex]);
 
@@ -109,14 +109,10 @@ export const sendTextBotMessage = function({ commit, state, getters }, { message
 };
 
 export const processMessage = function({ commit, state, dispatch }, userMessage) {
-  processInput(userMessage.content, TFX_SAMPLE)
-    .then((result) => {
-      commit(types.REMOVE_MESSAGE, userMessage.id);
-      commit(types.ADD_MESSAGE, { ...userMessage, status: true });
-      if (result.message && result.messageType) {
-        dispatch('sendTextBotMessage', { message: result.message, messageType: result.messageType });
-      }
-    });
+  let result = processInput(userMessage.content, TFX_SAMPLE);
+  if (result) {
+    dispatch('sendTextBotMessage', { message: result, messageType: 'text' });
+  }
 };
 
 

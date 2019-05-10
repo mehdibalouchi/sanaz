@@ -159,27 +159,14 @@ export const getInputSuggetions = (input) => {
 };
 
 export const processInput = function(input, tfx) {
-  let address = 'http://18.191.195.178:5000';
-  return new Promise((resolve, reject) => {
-    discover(address, tfx, input)
-      .then((result) => {
-        console.log(result);
-        // let { command, params } = commandFactory(input);
-        let commandResult = runAction(result.command[0], result.params);
-        resolve(responseFactory(commandResult));
-      })
-      .catch((err) => {
-        console.log(err);
-        reject();
-      });
-  });
+  return runAction(input);
 };
 
 
 const runAction = function(command, params) {
   console.log(`hello im sanaz and doing ${command} for you!`);
-  console.log(params);
-  window.postMessage({ 'type': 'FROM_SANAZ', command, 'params': params }, '*');
+  window.postMessage({ 'type': 'FROM_SANAZ', command }, '*');
+  return null;
 };
 
 const responseFactory = (commandResult) => {
