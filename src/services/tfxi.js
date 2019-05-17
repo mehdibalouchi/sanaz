@@ -1,4 +1,5 @@
 import FuzzySearch from 'fuzzy-search';
+import { discover } from './discovery';
 
 export const textToCommand = {
   'format A1:A3 date': {
@@ -20,19 +21,19 @@ export const availableCommand = {
   //   sample: 'format A1:A3 date',
   //   voiceContext: [],
   // },
-  'getCells': {
+  getCells: {
     sample: 'A1:A2',
-    func: (cells) => {
+    func: cells => {
       console.log(`getting ${cells} !`);
       return {
         fields: ['A'],
-        items: [{ 'A': '2019-04-01' }, { 'A': '2019-04-02' }],
+        items: [{ A: '2019-04-01' }, { A: '2019-04-02' }],
       };
     },
     returnType: 'table',
     hint: 'print [cells]',
   },
-  'failed': {
+  failed: {
     func: () => {
       console.log(`cant understand what u saying !`);
       return `cant understand what u saying !`;
@@ -42,7 +43,6 @@ export const availableCommand = {
     sample: '',
   },
 };
-
 
 export const inputSuggestions = Object.keys(availableCommand).reduce(function(result, key) {
   return result.concat([...availableCommand[key].sample.split(' '), ...availableCommand[key].hint.split(' ')]);
@@ -98,8 +98,7 @@ const deleteSelectPatternGenerator = () => {
   let samples = [];
   for (let a of ['', 'column', 'row']) {
     for (let b of cells) {
-      for (let command of ['select', 'delete'])
-        samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}` });
+      for (let command of ['select', 'delete']) samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}` });
     }
   }
   return samples;
@@ -112,8 +111,7 @@ const insetPatternGenerator = () => {
   for (let a of ['before', 'after']) {
     for (let b of ['', 'column', 'row']) {
       for (let c of cells) {
-        for (let command of ['insert'])
-          samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}` });
+        for (let command of ['insert']) samples.push({ command: `${command}${a === '' ? '' : ' '}${a}${b === '' ? '' : ' '}${b}${c === '' ? '' : ' '}${c}` });
       }
     }
   }
@@ -122,20 +120,40 @@ const insetPatternGenerator = () => {
 
 let insetPatterns = insetPatternGenerator();
 
-export const commandSuggestions = [
-  ...formatPatterns,
-  ...sortPatterns,
-  ...deleteSelectPatterns,
-  ...insetPatterns,
-
-];
+export const commandSuggestions = [...formatPatterns, ...sortPatterns, ...deleteSelectPatterns, ...insetPatterns];
 
 export const badOfWord = [
-  'format', 'date', 'to', 'as', 'date', 'text', 'A', 'B', 'C', 'D', 'E', '1', '2', '3', '4', '5', '6', '7', '8', 'insert', 'delete', 'before',
-  'after', 'sort', 'column', 'row', 'ascending', 'descending',
+  'format',
+  'date',
+  'to',
+  'as',
+  'date',
+  'text',
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  'insert',
+  'delete',
+  'before',
+  'after',
+  'sort',
+  'column',
+  'row',
+  'ascending',
+  'descending',
 ];
 
-export const getCommandSuggetions = (input) => {
+export const getCommandSuggetions = input => {
   const searcher = new FuzzySearch(commandSuggestions, ['command'], {
     caseSensitive: false,
     sort: true,
@@ -145,34 +163,57 @@ export const getCommandSuggetions = (input) => {
   return result.length > 0 ? [result[0]['command']] : [];
 };
 
-export const getSample = (hint) => {
-  let item = commandSuggestions.find((value) => value === hint);
+export const getSample = hint => {
+  let item = commandSuggestions.find(value => value === hint);
   return item;
 };
 
-export const getInputSuggetions = (input) => {
+export const getInputSuggetions = input => {
   let searchString = input.split(' ').slice(-1)[0];
-  if (searchString && searchString.length > 0 && input.length > 0)
-    return badOfWord.filter((item) => String(item).startsWith(String(searchString)));
+  if (searchString && searchString.length > 0 && input.length > 0) return badOfWord.filter(item => String(item).startsWith(String(searchString)));
   return [];
 };
 
 export const processInput = function(input, tfx) {
-  return runAction(input);
+  return runAction(input, tfx);
 };
 
+const shorten = function(str) {
+  if (str === 'ascending') return 'asc';
+  else if (str === 'descending') return 'desc';
+};
 
-const runAction = function(command, params) {
-  console.log(`hello im sanaz and doing ${command} for you!`);
-  window.postMessage({ 'type': 'FROM_SANAZ', command }, '*');
+const prepareCommandForApp = function(cmd, params) {
+  console.log(cmd);
+  console.log(params);
+  switch (cmd) {
+    case 'select':
+      return `select ${params[0].name}`;
+    case 'format':
+      return `format ${params[0].name} ${params[1].type}`;
+    case 'delete':
+      return `delete ${params[0].name}`;
+    case 'sort':
+      return `sort ${params[0].name} ${shorten(params[1].order)}`;
+    default:
+      return '';
+  }
+};
+
+const runAction = function(cmd, tfx) {
+  let address = 'http://localhost:5000';
+  discover(address, tfx, cmd).then(({ command, params }) => {
+    console.log(`hello im sanaz and doing ${command} for you!`);
+    window.postMessage({ type: 'FROM_SANAZ', command: prepareCommandForApp(command[0], params) }, '*');
+  });
   return null;
 };
 
-const responseFactory = (commandResult) => {
+const responseFactory = commandResult => {
   return { message: commandResult, messageType: 'text' };
 };
 
-const commandFactory = (input) => {
+const commandFactory = input => {
   if (typeof input === 'string' && textToCommand.hasOwnProperty(input)) {
     return textToCommand[input];
   }
@@ -181,7 +222,6 @@ const commandFactory = (input) => {
     params: [],
   };
 };
-
 
 export default {
   textToCommand,

@@ -20,6 +20,7 @@
     "babel-plugin-transform-custom-element-classes": "^0.1.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.18",
+    "fs": "0.0.1-security",
     "fuzzy-search": "^3.0.1",
     "jquery": "^3.4.0",
     "marx-css": "^3.0.7",
